@@ -9,12 +9,12 @@ namespace Microsoft.Extensions.Caching
 {
     public static class Extensions
     {
-        public static Task<T> GetOrAdd<T>(this IMemoryCache cache, Func<Task<T>> factoryMethod)
+        public static Task<T> GetOrAdd<T>(this IMemoryCache cache, string key, Func<string,Task<T>> factoryMethod)
         {
             throw new NotImplementedException();
         }
 
-        public static Task<T> GetOrAdd<T>(this IDistributedCache cache, Func<Task<T>> factoryMethod)
+        public static Task<T> GetOrAdd<T>(this IDistributedCache cache, string key, Func<string, Task<T>> factoryMethod)
         {
             throw new NotImplementedException();
         }
