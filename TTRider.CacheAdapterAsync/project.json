@@ -1,0 +1,32 @@
+﻿{
+  "version": "1.0.0-*",
+  "title": "TTRider.CacheAdapterAsync",
+  "name": "TTRider.CacheAdapterAsync",
+  "authors": [ "TTRider", "AdaptCore Technologies", "iatam" ],
+  "packOptions": {
+    "owners": [ "TTRider" ],
+
+    "licenseUrl": "https://github.com/ttrider/CacheAdapterAsync/blob/master/LICENSE",
+    "projectUrl": "https://github.com/ttrider/CacheAdapterAsync",
+    "tags": [ "SQL" ]
+  },
+  "description": "Provides the thread-safe extension to the IMemoryCache and IDistributedCache",
+  "copyright": "Copyright (C) 2014-2016 TTRider, L.L.C.",
+
+  "dependencies": {
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    },
+    "net461": {
+      "dependencies": {
+      },
+      "frameworkAssemblies": {
+      }
+    }
+  }
+}
