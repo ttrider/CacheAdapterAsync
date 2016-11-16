@@ -4,43 +4,63 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching;
 using Microsoft.Extensions.Caching.Memory;
 using Xunit;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Tests
 {
     public class Tests
     {
         [Fact]
-        public async Task SimpleTest()
+        public async Task SimpleGetItemTest()
         {
             var mc = new MemoryCache(new MemoryCacheOptions());
 
-            // create multiple parallel requests.
-            // if the code works properly, all of them 
-            // should get the same value and the 
-            // memory cache instance should have
-            // the only one entry with the same value
+            var targetKey = "test";
+            var targetValue = 1;
 
-            var key = "any";
-            var targetValue = 1972;
+            var index = targetValue;
+            mc.Set(targetKey, targetValue);
+
+            var result = await mc.GetOrAdd<int>(targetKey, (k) => Task.FromResult(index++));
+
+            Assert.Equal(targetValue, result);
+        }
+
+        [Fact]
+        public async Task SimpleAddItemTest()
+        {
+            var mc = new MemoryCache(new MemoryCacheOptions());
+
+            var targetKey = "test";
+            var targetValue = 1;
+            var index = targetValue;
+
+            var result = await mc.GetOrAdd<int>(targetKey, (k) => Task.FromResult(index++));
+
+            Assert.Equal(targetValue, result);
+            Assert.NotEqual(index, result);
+        }
+
+        [Fact]
+        public async Task SimpleMultiRequestsTest()
+        {
+            var mc = new MemoryCache(new MemoryCacheOptions());
+
+            var key = "test";
+            var targetValue = 1;
             var index = targetValue;
             var tasks = Enumerable.Repeat(Task.Run(async () =>
             {
                 return await mc.GetOrAdd(key, (k) => Task.FromResult(index++));
-            }), 100).ToList();
+            }), 1000).ToList();
 
 
-            // wait until all tasks get their value
             await Task.WhenAll(tasks);
-
             foreach (var task in tasks)
             {
                 Assert.Equal(targetValue, task.Result);
             }
-
             Assert.Equal(targetValue, mc.Get<int>(key));
-
-
-
         }
     }
 }
