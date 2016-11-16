@@ -21,7 +21,7 @@ namespace Tests
             var index = targetValue;
             mc.Set(targetKey, targetValue);
 
-            var result = await mc.GetOrAdd<int>(targetKey, (k) => Task.FromResult(index++));
+            var result = await mc.GetOrCreateExclusiveAsync<int>(targetKey, (k) => Task.FromResult(index++));
 
             Assert.Equal(targetValue, result);
         }
@@ -35,7 +35,7 @@ namespace Tests
             var targetValue = 1;
             var index = targetValue;
 
-            var result = await mc.GetOrAdd<int>(targetKey, (k) => Task.FromResult(index++));
+            var result = await mc.GetOrCreateExclusiveAsync<int>(targetKey, (k) => Task.FromResult(index++));
 
             Assert.Equal(targetValue, result);
             Assert.NotEqual(index, result);
@@ -51,7 +51,7 @@ namespace Tests
             var index = targetValue;
             var tasks = Enumerable.Repeat(Task.Run(async () =>
             {
-                return await mc.GetOrAdd(key, (k) => Task.FromResult(index++));
+                return await mc.GetOrCreateExclusiveAsync(key, (k) => Task.FromResult(index++));
             }), 1000).ToList();
 
 
